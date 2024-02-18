@@ -27,22 +27,6 @@ export default function UploadPhoto() {
 
         alert(file);
 
-        const data = {
-            prediction: "Clear skies; All good!"
-        
-        }
-
-        const urlsp = new URLSearchParams({ q: data.prediction })
-        const reader = new FileReader();
-        reader.readAsDataURL(file)
-
-        reader.onloadend = () => {
-            setSRC(reader.result)
-        }
-
-
-        alert(file)
-
         const prompt_response = prompt("Confirm that this is the correct photo (use true, or yes)")
 
 
@@ -51,15 +35,24 @@ export default function UploadPhoto() {
                 method: "POST",
                 body: formData,
             })
-                .then((response) => response.json())
-                .then(() => {
-                    void router.push({
-                        pathname: "/resultstats",
-                        query: { q: data.prediction }
-                    });
-                    setMSG("Uploaded!")
-                })
-                .catch((error) => { console.log(error) })
+            .then((response) => response.json())
+                .then((data) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file)
+
+                    reader.onloadend = async () => {
+                        alert(reader.result)
+                        setSRC(reader.result)
+                        setTimeout(() => {
+                            setMSG("Uploaded!")
+                            router.push({
+                                pathname: "/resultstats",
+                                query: { q: data.message.message, i: reader.result }
+                            })
+                        }, 2500)
+                    }
+        })
+            .catch((error) => { console.log(error) })
         } else {
             setMSG("Upload another Photo")
         }
@@ -78,7 +71,7 @@ export default function UploadPhoto() {
             <h3 className="leading-8">Make sure you have a clear view.  Your lighting should be pure daylight.  The sky should cover ~50% of the photo.</h3>
           </div>
           <div id = "prediction">
-                    <label htmlFor="input-file" id = "drop-area">
+                    <label htmlFor="input-file" id = "drop-area"> {img_src}
                         <input type="file" onChange={(e: ChangeEvent<HTMLInputElement>) => { 
                             setFile(e.currentTarget.files![0])
                         }} accept="image/*" />

@@ -6,9 +6,10 @@ import { api } from "~/utils/api";
 export default function ResultsStats() {
 
     const searchParms = useSearchParams()
+    const {  } = api.posts.create()
 
     function shareResults() {
-       console.log("hello")
+       
     }
 
   return (
@@ -27,9 +28,10 @@ export default function ResultsStats() {
           <ProgressBar />
         </div>
         <div className="flex flex-col items-center gap-[1rem]">
+        <img src={searchParms.get("i")} />
           <div className="w-full items-center justify-center rounded-3xl bg-green-700">
             <div className="p-[2.5rem] text-center text-8xl font-extrabold text-white">
-              {searchParms.get("q")}
+              {searchParms.get("q").slice(3)}
             </div>
           </div>
           <div className="w-10/12 text-center text-sm text-gray-400">
