@@ -1,14 +1,14 @@
 import { UserButton } from "@clerk/nextjs";
 import ProgressBar from "components/svgs/progressbar";
 import { useSearchParams  } from "next/navigation"
-import { api } from "~/utils/api";}
+import { api } from "~/utils/api";
 
 export default function ResultsStats() {
 
     const searchParms = useSearchParams()
 
     function shareResults() {
-
+       console.log("hello")
     }
 
   return (

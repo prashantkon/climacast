@@ -1,49 +1,68 @@
 import { UserButton } from "@clerk/nextjs"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useState, MouseEvent, ChangeEvent } from "react"
 
 export default function UploadPhoto() {
 
     const [img_src, setSRC] = useState("image_sample.png")
     const [msg, setMSG] = useState("Upload Photo")
     const router = useRouter()
+    const [file, setFile] = useState<undefined | File>(undefined)
 
-    function upload(e) {
+    function upload() {
         setMSG("Uploading...")
-        const imgLink = URL.createObjectURL(inputFile.files[0]);
-        setSRC(`url(${imgLink}))`);
 
-        const file = e.files[0];
+        alert("AFTER SET MESSAGE")
+
         const formData = new FormData();
+
+        console.log("GOTTEN FORM DATA")
+        if(file == null) {
+            alert("No image selected and fill is null");
+            console.log("No image selected");
+
+            return;
+        }
         formData.append("image", file);
 
-        // Make a POST request to the backend API
-        fetch("http://127.0.0.1:5000/predict", {
-            method: "POST",
-            body: formData,
-        })
+        alert(file);
 
-        .then((response) => {
-        if (response.ok) {
-
-            return response.json(); // Parse the response as JSON
-        } else {
-            throw new Error("Error: " + response.status);
+        const data = {
+            prediction: "Clear skies; All good!"
+        
         }
-        })
-        .then((data) => {
-            console.log(data);
-            void router.push(`/resultstats&q=${data.prediction}`)
-        })
-        .catch((error) => {
 
-        console.error(error);
-        });
-        setTimeout(() => {
-            setMSG("Uploaded!")
-            setSRC("home_img.png")
-            void router.push('/resultstats')
-        }, 1000)
+        const urlsp = new URLSearchParams({ q: data.prediction })
+        const reader = new FileReader();
+        reader.readAsDataURL(file)
+
+        reader.onloadend = () => {
+            setSRC(reader.result)
+        }
+
+
+        alert(file)
+
+        const prompt_response = prompt("Confirm that this is the correct photo (use true, or yes)")
+
+
+        if(prompt_response == "true" || prompt_response == "yes") { 
+            fetch("http://127.0.0.1:5000/predict", {
+                method: "POST",
+                body: formData,
+            })
+                .then((response) => response.json())
+                .then(() => {
+                    void router.push({
+                        pathname: "/resultstats",
+                        query: { q: data.prediction }
+                    });
+                    setMSG("Uploaded!")
+                })
+                .catch((error) => { console.log(error) })
+        } else {
+            setMSG("Upload another Photo")
+        }
     }
 
     return (
@@ -60,10 +79,12 @@ export default function UploadPhoto() {
           </div>
           <div id = "prediction">
                     <label htmlFor="input-file" id = "drop-area">
-                        <input type="file" onClick={(e) => upload(e)} accept="image/*" id="input-file" hidden />
+                        <input type="file" onChange={(e: ChangeEvent<HTMLInputElement>) => { 
+                            setFile(e.currentTarget.files![0])
+                        }} accept="image/*" />
                         <div id = "img-view">
                             <p>Drag and drop or click here <br /> to upload image</p>
-                            <button className="mr-auto ml-auto mt-[2rem] justify-left text-left bg-white text-green-600 w-[40vw] text-xl shadow-lg py-2 px-3 font-semibold rounded-md">
+                            <button onClick={() => upload()} className="mr-auto ml-auto mt-[2rem] justify-left text-left bg-white text-green-600 w-[40vw] text-xl shadow-lg py-2 px-3 font-semibold rounded-md">
                                 {msg}
                             </button>
                         </div>
