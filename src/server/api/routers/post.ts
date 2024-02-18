@@ -20,7 +20,7 @@ export const postRouter = createTRPCRouter({
       data: {
         comment: input.comment,
         img: input.img,
-        lat: input.latm,
+        lat: input.lat,
         long: input.lng
       }
     })

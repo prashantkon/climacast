@@ -2,15 +2,35 @@ import { UserButton } from "@clerk/nextjs";
 import ProgressBar from "components/svgs/progressbar";
 import { useSearchParams  } from "next/navigation"
 import { api } from "~/utils/api";
+import { useEffect, useState  } from "react";
 
 export default function ResultsStats() {
 
+    useEffect(() => {
+      setWindow(window)
+    }, [])
+
     const searchParms = useSearchParams()
-    const {  } = api.posts.create()
+    const { mutate } = api.climates.addReport.useMutation()
+    const [coors, setCoors] = useState({lat: 0, lng: 0})
+    const [windows, setWindow] = useState(window)
 
     function shareResults() {
-       
-    }
+    
+        let lat;
+        let lng;
+
+        windows.navigator.geolocation.getCurrentPosition(x => {
+          mutate({
+            comment: searchParms.get("q")!,
+            img: searchParms.get("i")!,
+            lat: x.coords.latitude,
+            lng: x.coords.longitude
+          })
+          alert("Shared successfully")
+        })
+      }
+
 
   return (
     <main className="h-[100vh] bg-[#F7F7F7]">
@@ -41,7 +61,7 @@ export default function ResultsStats() {
             <button className="rounded-lg bg-white px-4 py-3 text-left font-semibold text-green-600 shadow-lg">
               View Map
             </button>
-            <div className="text-gray-500 font-semibold" onClick={() => shareResults()}>Share</div>
+            <div className="text-gray-500 font-semibold cursor-pointer" onClick={() => shareResults()}>Share</div>
           </div>
         </div>
       </div>
