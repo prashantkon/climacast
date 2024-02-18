@@ -1,6 +1,7 @@
 import { api } from "~/utils/api";
 import React from "react";
 import { Map, GoogleApiWrapper, Marker } from "google-maps-react";
+import Card from "components/svgs/card";
 
 function BlogPage({ google }) {
 
@@ -28,15 +29,17 @@ function BlogPage({ google }) {
           );
         })}
       </Map>
-      <div className="pt-[75vh]">
-      {data.map(x => {
+      <div className="pt-[55vh]">
+      {data.map((x,k) => {
                 return (
-                    <div className="">
-                        <img src={x.img} />
-                        <p>{x.created_at.toString()}</p>
-                        <p>{x.comment}</p>
-                        <p>{x.lat} {x.long}</p>
-                    </div>
+                    <Card
+                        img={x.img}
+                        prof={x.profile_image}
+                        loc={`${x.lat} ${x.long}`}
+                        num={k}
+                        fullname={x.author_name}
+                        content={x.comment}
+                    />
                 )
         })}
         </div>

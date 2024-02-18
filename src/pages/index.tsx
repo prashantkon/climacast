@@ -21,12 +21,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="h-[100vh] bg-[#F7F7F7]">
-        <div className="mx-[2rem] flex min-h-screen flex-col gap-[3rem] bg-[#F7F7F7] pt-[2rem] ">
+      <main className="h-[130vh] ">
+        <div className="mx-[2rem] flex min-h-screen flex-col gap-[3rem]  pt-[2rem] ">
           <img src="/logo.png" className="mr-auto w-[40vw]" />
-          <div className="flex flex-col gap-[1.5rem]">
+          <div className="flex flex-col  gap-[1.5rem]">
             <img src="kone.jpg" className="w-[90vw] rounded-xl shadow-md" />
-            <div className="flex flex-col gap-[0.5rem]">
+            <div className="flex   flex-col gap-[0.5rem]">
               <div className="flex flex-row items-center gap-[0.5rem]">
                 <AcademicCapIcon className="h-8 w-8 font-semibold text-green-600" />
                 <div className="font-semibold text-green-600">
@@ -35,13 +35,13 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-0">
                 {" "}
-                <p className="leading-12 text-3xl font-bold">
+                <p className="text-white leading-12 text-3xl font-bold">
                   Climate Analysis with Novel AI
                 </p>
                 <Line />
               </div>
               <p className="text-gray-500">
-                <span className="font-semibold text-black">
+                <span className="font-semibold text-white">
                   Rapid environmental
                 </span>{" "}
                 information for low-income nations worldwide..
@@ -49,8 +49,8 @@ export default function Home() {
             </div>
             <div className="flex flex-row" onClick={() => router.push("")}>
               {isLoaded && user && (
-                <button className="rounded-lg bg-white px-4 py-3 text-left font-semibold text-green-600 shadow-lg">
-                  Register
+                <button onClick={() => router.push("/uploadphoto")} className="rounded-lg bg-white px-4 py-3 text-left font-semibold text-green-600 shadow-lg">
+                  Continue
                 </button>
               )}
               {!isLoaded ||

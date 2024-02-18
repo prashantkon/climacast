@@ -1,4 +1,4 @@
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import ProgressBar from "components/svgs/progressbar";
 import { useSearchParams  } from "next/navigation"
 import { api } from "~/utils/api";
@@ -14,6 +14,8 @@ export default function ResultsStats() {
     const { mutate } = api.climates.addReport.useMutation()
     const [coors, setCoors] = useState({lat: 0, lng: 0})
     const [windows, setWindow] = useState(window)
+    const { user } = useUser()
+
 
     function shareResults() {
     
@@ -25,7 +27,9 @@ export default function ResultsStats() {
             comment: searchParms.get("q")!,
             img: searchParms.get("i")!,
             lat: x.coords.latitude,
-            lng: x.coords.longitude
+            lng: x.coords.longitude,
+            author: user?.fullName,
+            author_prof: user?.imageUrl
           })
           alert("Shared successfully")
         })

@@ -5,27 +5,20 @@ import { useState, MouseEvent, ChangeEvent } from "react"
 export default function UploadPhoto() {
 
     const [img_src, setSRC] = useState("image_sample.png")
-    const [msg, setMSG] = useState("Upload Photo")
+    const [msg, setMSG] = useState("Submit Photo")
     const router = useRouter()
     const [file, setFile] = useState<undefined | File>(undefined)
 
     function upload() {
         setMSG("Uploading...")
 
-        alert("AFTER SET MESSAGE")
-
         const formData = new FormData();
 
-        console.log("GOTTEN FORM DATA")
         if(file == null) {
-            alert("No image selected and fill is null");
-            console.log("No image selected");
-
             return;
         }
-        formData.append("image", file);
 
-        alert(file);
+        formData.append("image", file);
 
         const prompt_response = prompt("Confirm that this is the correct photo (use true, or yes)")
 
@@ -41,7 +34,6 @@ export default function UploadPhoto() {
                     reader.readAsDataURL(file)
 
                     reader.onloadend = async () => {
-                        alert(reader.result)
                         setSRC(reader.result)
                         setTimeout(() => {
                             setMSG("Uploaded!")
@@ -71,12 +63,11 @@ export default function UploadPhoto() {
             <h3 className="leading-8">Make sure you have a clear view.  Your lighting should be pure daylight.  The sky should cover ~50% of the photo.</h3>
           </div>
           <div id = "prediction">
-                    <label htmlFor="input-file" id = "drop-area"> {img_src}
+                    <label htmlFor="input-file" id = "drop-area"> 
                         <input type="file" onChange={(e: ChangeEvent<HTMLInputElement>) => { 
                             setFile(e.currentTarget.files![0])
                         }} accept="image/*" />
                         <div id = "img-view">
-                            <p>Drag and drop or click here <br /> to upload image</p>
                             <button onClick={() => upload()} className="mr-auto ml-auto mt-[2rem] justify-left text-left bg-white text-green-600 w-[40vw] text-xl shadow-lg py-2 px-3 font-semibold rounded-md">
                                 {msg}
                             </button>
